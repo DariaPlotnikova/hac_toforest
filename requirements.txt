@@ -2,4 +2,4 @@ Django == 1.8
 requests
 uwsgi
 Pillow
-django-ipware
+psycopg2

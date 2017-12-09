@@ -14,18 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-WSGI config for toforest project.
+# [START vendor]
+from google.appengine.ext import vendor
 
-It exposes the WSGI callable as a module-level variable named ``application``.
-
-For more information on this file, see
-https://docs.djangoproject.com/en/1.8/howto/deployment/wsgi/
-"""
-
-import os
-
-from django.core.wsgi import get_wsgi_application
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "toforest.settings")
-
-application = get_wsgi_application()
+vendor.add('lib')
+# [END vendor]

@@ -1,3 +1,4 @@
+# _*_ coding: utf-8 _*_
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.db import connections
@@ -46,15 +47,15 @@ class NatureKind(models.Model):
         return {
             'pk': self.pk,
             'title': self.title,
-            'description': strip_tags(self.description),
+            'description': strip_tags(self.description) if self.description else u'отсутствует',
             'contact': '',
-            'address': self.address,
+            'address': self.address if self.address else u'не указан',
             'geo_x': self.geo_x,
             'geo_y': self.geo_y,
             'type': self.type.pk,
-            'type_name': self.type.title,
+            'type_name': self.type.title if self.type.title else u'не указан',
             'region': self.region.pk,
-            'region_name': self.region.title,
+            'region_name': self.region.title if self.type.title else u'не указан',
             'image': self.image_url
         }
 

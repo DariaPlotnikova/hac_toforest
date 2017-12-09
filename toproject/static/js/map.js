@@ -13,6 +13,8 @@ $(document).ready(function(){
 
         map.balloon.setOptions('autoPan', true);
 
+
+
         /*
         map.controls.add(
           new ymaps.control.Button({
@@ -90,9 +92,21 @@ $(document).ready(function(){
 
         // отрисовываем начальные точки на карте
         var url = $('#ajaxUrl').val();
-        var coords = [55.763951, 37.612728];      // тут нужно подставить координаты из какого-то сервиса
-
-
+        var coords = [55.763951, 37.612728];      // TODO тут нужно подставить координаты из какого-то сервиса
+        var myPoint = new ymaps.Placemark(
+            [coords[0], coords[1]],
+            {
+                preset: "twirl#blueStretchyIcon",
+                fillColor: 'ff0000',
+                strokeColor: 'ff0000',
+                hintContent: 'Это Вы'
+            },
+            {
+                iconColor: '#852d14',     // цвет метки для кластера
+                iconImageSize: [40, 53]   // Размер значка
+            }
+        );
+        map.geoObjects.add(myPoint);
 
         console.log(url);
 
@@ -153,7 +167,7 @@ $(document).ready(function(){
 
 
         /* РАСКОММЕНТИТЬ ДЛЯ ОТРИСОВКИ BACKEND-ДАННЫХ */
-
+        var wayUrl = $('#wayUrl').val();
         $.get(url, {}, function(json){
             var points = [];
             var json_point, point, pointBalloonLayout;
@@ -161,13 +175,14 @@ $(document).ready(function(){
             var objects = $.parseJSON(json);
             $(objects).each(function(){
                 var json_point = $(this)[0];
-                console.log(json_point['title']);
+                var wayUrlFull = wayUrl + '?point=' + json_point['pk'];
+                console.log(wayUrlFull);
 
                 point = new ymaps.Placemark(
                     [json_point['geo_x'], json_point['geo_y']],
                     {
-                        //name: json_point['title'],
                         preset: 'twirl#greenIcon',
+                        hintContent: json_point['hint']
                         //balloonHeader: json_point['title'],
                         //balloonContent: generateBalloonLayout(json_point['title']),  // идет в дефолтный балун кластера, и если не указан balloonContentLayout, то и туда идет это значение
                         //balloonContentBody: generateBalloonLayout(json_point['description'])
@@ -177,7 +192,7 @@ $(document).ready(function(){
                         iconColor: '#558507',     // цвет метки для кластера
                         // iconImageHref: data[i].sellers[0].manufacturer ? manufacturerImg : sellerImg,
                         // iconImageOffset: [-20, -50],     // Положение "ножки" значка
-                        iconImageSize: [40, 53],         // Размер значка
+                        iconImageSize: [40, 53]         // Размер значка
                         //balloonLayout: pointBalloonLayout,
                         // balloonOffset: [-20, -50]
                     }
@@ -200,9 +215,13 @@ $(document).ready(function(){
                     }).find('.modal').click(function(e){        // вешаем на потомков
                         e.stopPropagation();   // предотвращаем всплытие
                     });
-                    $(modal).find('.item_title .value').find('a').attr('href','https://www.google.ru/search?q='+json_point['title']
-                    ).html(json_point['title']);
-                    $(modal).find('.item_address .value').html(json_point['address']);
+                    $(modal).find('.item_title .value').find('a').attr('href','https://www.google.ru/search?q='+json_point['title']).html(json_point['title']);
+                    if (json_point['geo_x'] && json_point['geo_y']) {
+                        $(modal).find('.item_address .value').find('a').attr('href', wayUrlFull).html(json_point['address']);
+                    }
+                    else {          // если координат нет, то делаем не кликабельной
+                        $(modal).find('.item_address .value').find('a').attr('href', 'javascript:void(0);').html(json_point['address']);
+                    }
                     $(modal).find('.item_img .value img').attr('src', json_point['image']);
                     $(modal).find('.item_type .value').html(json_point['type_name']);
                     $(modal).find('.item_region .value').html(json_point['region_name']);
