@@ -6,6 +6,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import ugettext_lazy as _
 from django.db.models.loading import get_model
 from django.conf import settings
+from django.utils.html import strip_tags
 
 
 class ObjectType(models.Model):
@@ -45,7 +46,7 @@ class NatureKind(models.Model):
         return {
             'pk': self.pk,
             'title': self.title,
-            'description': self.description,
+            'description': strip_tags(self.description),
             'contact': '',
             'address': self.address,
             'geo_x': self.geo_x,
