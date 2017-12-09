@@ -81,4 +81,14 @@ class Command(BaseCommand):
         self.stdout.write(u'SUCCESS: Park #2 objects load. Count %d' % count)
         '''
 
+        # All other data
+        url_objects = 'http://opendata.mkrf.ru/opendata/7705851331-egrkn/data-13-structure-2.json'
+        response = requests.get(url_objects)
+        all_objects = response.json()
+        count = 0
+        for obj in iter(all_objects):
+            print 'data --------- ' + str(obj.keys())
+
+            count += 1
+            break
 

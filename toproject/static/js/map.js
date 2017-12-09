@@ -101,6 +101,7 @@ $(document).ready(function(){
             {}
         );
 
+        /*
         var testpoint = new ymaps.Placemark(
             [55.763951, 37.612728],
             {
@@ -147,30 +148,29 @@ $(document).ready(function(){
             $(modal).find('.item_region .value').html('x');
             $(modal).find('.item_description .value').html('x');
         });
+        */
+
+
 
         /* РАСКОММЕНТИТЬ ДЛЯ ОТРИСОВКИ BACKEND-ДАННЫХ */
-        /*
+
         $.get(url, {}, function(json){
             var points = [];
             var json_point, point, pointBalloonLayout;
             var yapoints = new ymaps.GeoObjectCollection({}, {preset: "islands#redCircleIcon", strokeWidth: 4, geodesic: true});
             var objects = $.parseJSON(json);
             $(objects).each(function(){
-                json_point = $(this)[0];
+                var json_point = $(this)[0];
                 console.log(json_point['title']);
-                pointBalloonLayout = ymaps.templateLayoutFactory.createClass(
-                    '<div class="map-balloon">' + json_point['title'] + '</div>',
-                    {}
-                );
 
                 point = new ymaps.Placemark(
                     [json_point['geo_x'], json_point['geo_y']],
                     {
-                        name: json_point['title'],
+                        //name: json_point['title'],
                         preset: 'twirl#greenIcon',
-                        balloonHeader: json_point['title'],
-                        balloonContent: generateBalloonLayout(json_point['title']),  // идет в дефолтный балун кластера, и если не указан balloonContentLayout, то и туда идет это значение
-                        balloonContentBody: generateBalloonLayout(json_point['description'])
+                        //balloonHeader: json_point['title'],
+                        //balloonContent: generateBalloonLayout(json_point['title']),  // идет в дефолтный балун кластера, и если не указан balloonContentLayout, то и туда идет это значение
+                        //balloonContentBody: generateBalloonLayout(json_point['description'])
                     },
                     {
                         // iconLayout: 'default#imageWithContent',                                 // метка с картинкой
@@ -178,16 +178,41 @@ $(document).ready(function(){
                         // iconImageHref: data[i].sellers[0].manufacturer ? manufacturerImg : sellerImg,
                         // iconImageOffset: [-20, -50],     // Положение "ножки" значка
                         iconImageSize: [40, 53],         // Размер значка
-                        balloonLayout: pointBalloonLayout,
+                        //balloonLayout: pointBalloonLayout,
                         // balloonOffset: [-20, -50]
                     }
                 );
                 yapoints.add(point);
+                point.events.add('click', function(){
+                    var modal = $('.baloon_desc');
+                    $('.baloon_desc').fadeIn().find('.modal').addClass('show_modal-left');
+                    $(modal).find('.close_modal').on('click', function(e) {
+                        e.preventDefault();
+                        $(modal).fadeOut();
+                        $(modal).find('.modal').removeClass('show_modal-left');
+                        point.options.set('hasBalloon', false);
+                    });
+
+                    $(modal).click(function(){
+                       $(modal).find('.modal').removeClass('show_modal-left');
+                       $(modal).fadeOut();
+                       point.options.set('hasBalloon', false);
+                    }).find('.modal').click(function(e){        // вешаем на потомков
+                        e.stopPropagation();   // предотвращаем всплытие
+                    });
+                    $(modal).find('.item_title .value').find('a').attr('href','https://www.google.ru/search?q='+json_point['title']
+                    ).html(json_point['title']);
+                    $(modal).find('.item_address .value').html(json_point['address']);
+                    $(modal).find('.item_img .value img').attr('src', json_point['image']);
+                    $(modal).find('.item_type .value').html(json_point['type_name']);
+                    $(modal).find('.item_region .value').html(json_point['region_name']);
+                    $(modal).find('.item_description .value').html(json_point['description']);
+                });
             });
 
             map.geoObjects.add(yapoints);
         });
-        */
+
 
     });
 
