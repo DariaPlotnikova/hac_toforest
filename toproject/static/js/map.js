@@ -128,7 +128,7 @@ $(document).ready(function(){
             $(modal).find('.close_modal').on('click', function(e) {
                 e.preventDefault();
                 $(modal).fadeOut();
-                $(modal+'.baloon_desc').find('.modal').removeClass('show_modal-left');
+                $(modal).find('.modal').removeClass('show_modal-left');
                 testpoint.options.set('hasBalloon', false);
             });
 
