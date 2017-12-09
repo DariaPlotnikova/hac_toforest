@@ -9,6 +9,7 @@ admin_urls = patterns(
 public_urls = patterns(
     'toforest.webapp.views',
     url(r'^$', 'index', name='index'),
+    url(r'^get_points/$', 'get_points', name='get_points'),
 )
 
 

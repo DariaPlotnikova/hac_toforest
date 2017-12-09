@@ -12,5 +12,17 @@
 
 <body>
     <p>Привет. Хочу в лесок!</p>
+    {% for obj in objects %}
+    <p>{{ obj.title }}</p>
+    <p>{{ obj.description|safe }}</p>
+    <p>{{ obj.address }}</p>
+    <p>{{ obj.geo_x }}</p>
+    <p>{{ obj.geo_y }}</p>
+    <p>{{ obj.type }}</p>
+    <p>{{ obj.region }}</p>
+    {% if obj.image_url %}
+        <img src="{{ obj.image_url }}">
+    {% endif %}
+    {% endfor %}
 </body>
 </html>

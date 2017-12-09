@@ -46,6 +46,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'toforest.webapp'
 )
 
 MIDDLEWARE_CLASSES = (
