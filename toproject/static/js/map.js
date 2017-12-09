@@ -74,6 +74,8 @@ $(document).ready(function(){
             }
         });
 
+        
+
         // при открытии балуна на кластере(!), нужно обновить контент
         // таблицы по меткам, которые входят в этот кластер
         map.events.add(['balloonopen'], function (e) {
@@ -95,7 +97,7 @@ $(document).ready(function(){
         console.log(url);
 
         var pointBalloonLayout = ymaps.templateLayoutFactory.createClass(
-            '<div class="map-balloon">' + 'ЗАГОЛОВОК' + '</div>',
+            '',
             {}
         );
 
@@ -119,6 +121,32 @@ $(document).ready(function(){
             }
         );
         map.geoObjects.add(testpoint);
+
+        testpoint.events.add('click', function(){
+            var modal = $('.baloon_desc');
+            $('.baloon_desc').fadeIn().find('.modal').addClass('show_modal-left');
+            $(modal).find('.close_modal').on('click', function(e) {
+                e.preventDefault();
+                $(modal).fadeOut();
+                $(modal+'.baloon_desc').find('.modal').removeClass('show_modal-left');
+                testpoint.options.set('hasBalloon', false);
+            });
+
+            $(modal).click(function(){
+               $(modal).find('.modal').removeClass('show_modal-left');
+               $(modal).fadeOut();
+               testpoint.options.set('hasBalloon', false);
+            }).find('.modal').click(function(e){        // вешаем на потомков
+                e.stopPropagation();   // предотвращаем всплытие
+            });
+            $(modal).find('.item_title .value').find('a').attr('href','https://www.google.ru/search?q=x'
+            ).html('x');
+            $(modal).find('.item_address .value').html('x');
+            $(modal).find('.item_img .value img').attr('src', 'x');
+            $(modal).find('.item_type .value').html('x');
+            $(modal).find('.item_region .value').html('x');
+            $(modal).find('.item_description .value').html('x');
+        });
 
         /* РАСКОММЕНТИТЬ ДЛЯ ОТРИСОВКИ BACKEND-ДАННЫХ */
         /*
