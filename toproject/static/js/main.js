@@ -42,9 +42,21 @@ $(document).ready(function(){
         var modal = $(this).attr('data-modal');
         $(modal).fadeIn();
         $(modal+'.modal_instruction').find('.modal').addClass('show_modal');
+        $(modal+'.modal_description').find('.modal').addClass('show_modal-top');
+        $(modal+'.baloon_desc').find('.modal').addClass('show_modal-left');
+
+        $(modal).find('.close_modal').on('click', function(e) {
+            e.preventDefault();
+            $(modal).fadeOut();
+            $(modal+'.modal_instruction').find('.modal').removeClass('show_modal');
+               $(modal+'.modal_description').find('.modal').removeClass('show_modal-top');
+               $(modal+'.baloon_desc').find('.modal').removeClass('show_modal-left');
+        });
 
         $(modal).click(function(){
            $(modal+'.modal_instruction').find('.modal').removeClass('show_modal');
+           $(modal+'.modal_description').find('.modal').removeClass('show_modal-top');
+           $(modal+'.baloon_desc').find('.modal').removeClass('show_modal-left');
            $(modal).fadeOut();
         }).find('.modal').click(function(e){        // вешаем на потомков
             e.stopPropagation();   // предотвращаем всплытие
