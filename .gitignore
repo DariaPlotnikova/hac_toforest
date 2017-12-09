@@ -1,0 +1,28 @@
+*.xml
+*.json.idea
+.DS_Store
+.project
+.pydevproject
+*.pyc
+.settings
+*.un~
+*~
+#django
+#build
+*.swp
+.\#*
+\#*
+# archive files
+*.zip
+*.tar.gz
+*.rar
+# picture files
+*.jpg
+*.jpeg
+*.gif
+*.JPG
+*.bmp
+# video files
+*.mp4
+# audio files
+*.mp3
