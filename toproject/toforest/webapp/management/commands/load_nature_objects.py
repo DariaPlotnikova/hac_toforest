@@ -80,3 +80,5 @@ class Command(BaseCommand):
                 count += 1
         self.stdout.write(u'SUCCESS: Park #2 objects load. Count %d' % count)
         '''
+
+

@@ -8,10 +8,11 @@
 
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
 
-    <script src="{% static 'js/jquery-2.1.1.min.js' %}"></script>
+    <script src="js/jquery-2.1.1.min.js"></script>
     <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
-    <script src="{% static 'js/map.js' %}"></script>
-    <script src="{% static 'js/filter.js' %}"></script>
+    <script src="js/map.js"></script>
+    <script src="js/filter.js"></script>
+    <script src="js/main.js"></script>
 
 </head>
 <body>
@@ -101,47 +102,39 @@
         </div>
     </div>
 
-
-
     <div class="modal_container baloon_desc baloon_id">
         <div class="container">
             <div class="modal">
                 <img src="img/modal_close.svg" class="close_modal">
-                <div class="item">
-                    <div class="key">x</div>
-                    <div class="value">x</div>
+                <div class="item item_title">
+                    <div class="key">Название объекта:</div>
+                    <div class="value"><a href="" target="blank"></a></div>
                 </div>
-                <div class="item">
-                    <div class="key">x</div>
-                    <div class="value">x</div>
+                <div class="item item_address">
+                    <div class="key">Адрес:</div>
+                    <div class="value"></div>
                 </div>
-                <div class="item">
-                    <div class="key">x</div>
-                    <div class="value">x</div>
+                <div class="item item_img">
+                    <div class="key"></div>
+                    <div class="value"><img src=""></div>
                 </div>
-                <div class="item">
-                    <div class="key">x</div>
-                    <div class="value">x</div>
+                <div class="item item_type">
+                    <div class="key">Тип объекта:</div>
+                    <div class="value"></div>
                 </div>
-                <div class="item">
-                    <div class="key">x</div>
-                    <div class="value">x</div>
+                <div class="item item_region">
+                    <div class="key">Регион:</div>
+                    <div class="value"></div>
                 </div>
-                <div class="item">
-                    <div class="key">x</div>
-                    <div class="value">x</div>
-                </div>
-                <div class="item">
-                    <div class="key">x</div>
-                    <div class="value">x</div>
-                </div>
-                <div class="item">
-                    <div class="key">x</div>
-                    <div class="value">x</div>
+                <div class="item item_description">
+                    <div class="key">Описание:</div>
+                    <div class="value"></div>
                 </div>
             </div>
         </div>
     </div>
+
+    
 
     <input type="hidden" value="{% url 'webapp:public:get_points' %}" id="ajaxUrl">
 
