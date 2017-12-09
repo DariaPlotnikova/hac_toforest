@@ -170,3 +170,5 @@ function generateBalloonLayout(mark) {
 	var template = '<h5>' + mark['title'] + '<p>' + mark['description'] + '</p></h5>';
 	return template;
 }
+
+
