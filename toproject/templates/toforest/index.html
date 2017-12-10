@@ -6,13 +6,20 @@
     <meta name="viewport" content="width=device-width">
     <title>Хочу в ЛЕСОК</title>
 
-    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <link rel="stylesheet" href="css/main.css">
 
-    <script src="{% static 'js/jquery-2.1.1.min.js' %}"></script>
+
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/KitAnimate.css">
+    <!--[if lte IE 9]>
+        <link rel="stylesheet" href="css/styles-ie.css">
+    <![endif]-->
+
+    <script src="js/jquery-2.1.1.min.js"></script>
     <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
-    <script src="{% static 'js/map.js' %}"></script>
-    <script src="{% static 'js/filter.js' %}"></script>
-    <script src="{% static 'js/main.js' %}"></script>
+    <script src="js/map.js"></script>
+    <script src="js/filter.js"></script>
+    <script src="js/main.js"></script>
 
 </head>
 <body>
@@ -34,6 +41,7 @@
     <div class="modal_container modal_instruction">
         <div class="container">
             <div class="modal">
+                <img src="img/modal_close.svg" class="close_modal">
                 <form action="">
                     <div class="item">
                         <label for="select_city">Выберите город:</label><br>
@@ -46,9 +54,10 @@
                     <div class="item">
                         <label for="select_object">Выберите тип объекта:</label><br>
                         <select name="select_object" id="select_object">
-                            {% for t in types %}
-                                <option value="{{ t.pk }}">{{ t.title }}</option>
-                            {% endfor %}
+                            <option value="all" selected>Все объекты</option>
+                            <option value="1">Парки</option>
+                            <option value="2">Леса</option>
+                            <option value="3">Горы</option>
                         </select>
                     </div>
                 </form>
@@ -112,7 +121,7 @@
                 </div>
                 <div class="item item_address">
                     <div class="key">Адрес:</div>
-                    <div class="value"><a href="" target="blank"></a></div>
+                    <div class="value"></div>
                 </div>
                 <div class="item item_img">
                     <div class="key"></div>
@@ -130,6 +139,7 @@
                     <div class="key">Описание:</div>
                     <div class="value"></div>
                 </div>
+                <a href="#" class="button go_to_gps">Построить маршрут</a>
             </div>
         </div>
     </div>
@@ -137,7 +147,6 @@
     
 
     <input type="hidden" value="{% url 'webapp:public:get_points' %}" id="ajaxUrl">
-    <input type="hidden" value="{% url 'webapp:public:draw_way' %}" id="wayUrl">
 
     <script>
         
