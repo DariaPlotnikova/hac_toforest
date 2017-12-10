@@ -145,6 +145,52 @@ $(document).ready(function(){
             $(modal).find('.item_description .value').html('x');
         });
 
+
+       
+
+        var my_Layout = ymaps.templateLayoutFactory.createClass('<div class="metka metka-me"><div class="triangle"></div></div>');
+        var GPS = [55.723754, 37.685235];
+        var androidGPSLastTime = 1;
+        var androidGPSTimeOut = 10000;//10сек
+        function geoIp(clientIp) {
+            $.ajax({
+                url: "http://freegeoip.net/json/" + clientIp, success: function (result) {
+                    GPS =  [result['latitude'],result['longitude']];
+                }
+            });
+        }
+        function mobileSetGPS(mobile_gps) {
+            GPS = mobile_gps;
+            var date = new Date();
+            androidGPSLastTime = date.getSeconds() * 1000 + date.getMilliseconds();
+            $("#res").html("androidGPS"+GPS);
+        }
+        var me_point = new ymaps.Placemark(
+            GPS, {
+                    hintContent: ''
+                }, {
+                    iconLayout: my_Layout,
+                    // Описываем фигуру активной области "Прямоугольник".
+                    iconShape: {
+                        type: 'Rectangle',
+                        // Прямоугольник описывается в виде двух точек - верхней левой и нижней правой.
+                        coordinates: [
+                            [-40, -60], [0, 0]
+                        ]
+                    }
+                }
+        );
+        map.geoObjects.add(me_point);
+
+        setInterval(function () {
+            if (GPS != undefined) {
+                GPS = [GPS[0]+0.001, GPS[1]+0.001];
+                me_point.geometry.setCoordinates(GPS);
+            }
+        }, 1000);
+
+        
+
         
         /* РАСКОММЕНТИТЬ ДЛЯ ОТРИСОВКИ BACKEND-ДАННЫХ */
         /*
