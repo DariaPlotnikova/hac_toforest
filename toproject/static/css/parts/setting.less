@@ -1,0 +1,76 @@
+@font-face {
+  font-family: 'UbuntuRegular';
+  src: url('../fonts/Ubuntu-Regular.eot');
+  src: url('../fonts/Ubuntu-Regular.woff2') format('woff2'),
+       url('../fonts/Ubuntu-Regular.woff') format('woff'),
+       url('../fonts/Ubuntu-Regular.ttf') format('truetype'),
+       url('../fonts/Ubuntu-Regular.svg#Ubuntu-Regular') format('svg'),
+       url('../fonts/Ubuntu-Regular.eot?#iefix') format('embedded-opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'UbuntuBold';
+  src: url('../fonts/Ubuntu-Bold.eot');
+  src: url('../fonts/Ubuntu-Bold.woff2') format('woff2'),
+       url('../fonts/Ubuntu-Bold.woff') format('woff'),
+       url('../fonts/Ubuntu-Bold.ttf') format('truetype'),
+       url('../fonts/Ubuntu-Bold.svg#Ubuntu-Bold') format('svg'),
+       url('../fonts/Ubuntu-Bold.eot?#iefix') format('embedded-opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'UbuntuMedium';
+  src: url('../fonts/Ubuntu-Medium.eot');
+  src: url('../fonts/Ubuntu-Medium.woff2') format('woff2'),
+       url('../fonts/Ubuntu-Medium.woff') format('woff'),
+       url('../fonts/Ubuntu-Medium.ttf') format('truetype'),
+       url('../fonts/Ubuntu-Medium.svg#Ubuntu-Medium') format('svg'),
+       url('../fonts/Ubuntu-Medium.eot?#iefix') format('embedded-opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+
+@UReg : "UbuntuRegular";
+@UMed : "UbuntuMedium";
+@UBold : "UbuntuBold";
+
+@orange : #FF5700;
+
+.orange {
+  background-color: @orange !important;
+}
+
+body {
+  font-family: @UMed;
+  overflow-x: hidden;
+  color: #404040;
+  a {
+    font-family: @UMed;
+    text-decoration: none;
+    color: #000;
+  }
+}
+
+input::-webkit-input-placeholder { 
+  color: #8E8E8E;
+  font-family: @UMed;
+  font-size: 14px; 
+} 
+input:-moz-placeholder { 
+  color: #8E8E8E;
+  font-family: @UMed;
+  font-size: 14px;
+}
+
+
+  button, 
+  button:active, 
+  button:focus {
+      outline: none !important;
+  }

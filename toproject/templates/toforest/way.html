@@ -10,7 +10,6 @@
 
     <script src="{% static 'js/jquery-2.1.1.min.js' %}"></script>
     <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
-    <script src="{% static 'js/map.js' %}"></script>
     <script src="{% static 'js/filter.js' %}"></script>
     <script src="{% static 'js/main.js' %}"></script>
 
@@ -25,35 +24,9 @@
             </hgroup>
         </div>
     </div>
+
     <div class="my_map" id="YMapsID">
-        
-    </div>
 
-    <button class="button_open_instruct open_modal" data-modal=".modal_instruction">Параметры поиска</button>
-
-    <div class="modal_container modal_instruction">
-        <div class="container">
-            <div class="modal">
-                <form action="">
-                    <div class="item">
-                        <label for="select_city">Выберите город:</label><br>
-                        <select name="select_city" id="select_city">
-                            {% for reg in regions %}
-                                <option value="{{ reg.pk }}">{{ reg.title }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div class="item">
-                        <label for="select_object">Выберите тип объекта:</label><br>
-                        <select name="select_object" id="select_object">
-                            {% for t in types %}
-                                <option value="{{ t.pk }}">{{ t.title }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                </form>
-            </div>
-        </div>
     </div>
 
     <div class="body_overlay">
@@ -134,26 +107,114 @@
         </div>
     </div>
 
-    
-
     <input type="hidden" value="{% url 'webapp:public:get_points' %}" id="ajaxUrl">
-    <input type="hidden" value="{% url 'webapp:public:draw_way' %}" id="wayUrl">
 
     <script>
-        
+
         function check_calc(){
             var elem = document.createElement('div');
             elem.style.cssText = "width:calc(10px)";
             return !!elem.style.length;
         }
-        
+
         if(!check_calc()){
             var style = document.createElement('link');
             style.setAttribute('rel', 'stylesheet');
             style.setAttribute('href', 'css/styles.nocalc.css');
             document.body.appendChild(style);
         }
-        
+
+    </script>
+    <script>
+        ymaps.ready(function(){
+            var map = window.map = new ymaps.Map('YMapsID', { center: [56.034, 36.992], zoom: 8, controls: [] });
+            // удаляем лишние элементы управления с карты
+            map.controls.remove('mapTools');
+            map.controls.remove('trafficControl');
+            map.controls.remove('searchControl');
+            map.controls.remove('typeSelector');
+            map.controls.remove('geolocationControl');
+            map.controls.add('zoomControl');
+
+            map.balloon.setOptions('autoPan', true);
+
+            var coords = [55.763951, 37.612728];      // TODO тут нужно подставить координаты из какого-то сервиса
+            var goal_x = '{{ obj.geo_x }}';
+            var goal_y = '{{ obj.geo_y }}';
+
+            // строим маршрут от coords до geo_xy
+            ymaps.route([coords, [goal_x, goal_y]],
+                { mapStateAutoApply: true })
+                .then(function (route) {
+                     route.getPaths().options.set({
+                         // в балуне выводим только информацию о времени движения с учетом пробок
+                         balloonContentBodyLayout: ymaps.templateLayoutFactory.createClass('$[properties.humanJamsTime]'),
+                         // можно выставить настройки графики маршруту
+                         strokeColor: '019448',
+                         opacity: 0.7
+                     });
+                     // добавляем маршрут на карту
+                     map.geoObjects.add(route);
+
+                     // кастомим точки
+                     var points = route.getWayPoints();
+                     points.options.set('iconColor', '#558507');
+                     points.get(0).properties.set('iconContent', '<b>A</b>');
+                     points.get(1).properties.set('iconContent', '<b>B</b>');
+
+                     points.get(0).events.add('click', function(){
+                        var point = $(this);
+                        var modal = $('.baloon_desc');
+                        $('.baloon_desc').fadeIn().find('.modal').addClass('show_modal-left');
+                        $(modal).find('.close_modal').on('click', function(e) {
+                            e.preventDefault();
+                            $(modal).fadeOut();
+                            $(modal).find('.modal').removeClass('show_modal-left');
+                            point.options.set('hasBalloon', false);
+                        });
+
+                        $(modal).click(function(){
+                           $(modal).find('.modal').removeClass('show_modal-left');
+                           $(modal).fadeOut();
+                           point.options.set('hasBalloon', false);
+                        }).find('.modal').click(function(e){        // вешаем на потомков
+                            e.stopPropagation();   // предотвращаем всплытие
+                        });
+                        $(modal).find('.item_title .value').html('Вы находитесь здесь');
+                        $(modal).find('.item_address .value').html('');
+                        $(modal).find('.item_img .value img').attr('src', '');
+                        $(modal).find('.item_type .value').html('');
+                        $(modal).find('.item_region .value').html('');
+                        $(modal).find('.item_description .value').html('');
+                    });
+
+                    points.get(1).events.add('click', function(){
+                        var point2 = $(this);
+                        var modal = $('.baloon_desc');
+                        $('.baloon_desc').fadeIn().find('.modal').addClass('show_modal-left');
+                        $(modal).find('.close_modal').on('click', function(e) {
+                            e.preventDefault();
+                            $(modal).fadeOut();
+                            $(modal).find('.modal').removeClass('show_modal-left');
+                            point2.options.set('hasBalloon', false);
+                        });
+
+                        $(modal).click(function(){
+                           $(modal).find('.modal').removeClass('show_modal-left');
+                           $(modal).fadeOut();
+                           point2.options.set('hasBalloon', false); // TODO тут ошибка, почему-то point2.options == undefined? Причем первый раз хорошо отрабатывает
+                        }).find('.modal').click(function(e){        // вешаем на потомков
+                            e.stopPropagation();   // предотвращаем всплытие
+                        });
+                        $(modal).find('.item_title .value').find('a').attr('href','https://www.google.ru/search?q={{ obj.title }}').html('{{ obj.title }}');
+                        $(modal).find('.item_address .value').html('{{ obj.address }}');
+                        $(modal).find('.item_img .value img').attr('src', '{{ obj.image_url }}');
+                        $(modal).find('.item_type .value').html('{{ obj.type.title }}');
+                        $(modal).find('.item_region .value').html('{{ obj.region.title }}');
+                        $(modal).find('.item_description .value').html('{{ obj.description|striptags }}');
+                    });
+                });
+            });
     </script>
 </body>
 </html>
